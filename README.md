@@ -11,7 +11,7 @@ Calculate ways to reach target sum `Target` with given constraints, as needed fo
 ### Arguments
 - `include=1:9`: The allowed digits
 - `exclude=zeros(Int64,0)`: Digits to exclude (Only digits that are in `include` and are NOT in `exclude` are used)
-- `unique=true`: Whether to disallow repeat digits (i.e. disable for little killer diagonals)
+- `maxrepeats=1`: Maximum number of times a digit can appear.
 
 ### Examples
 `sudokalculate(10)` gives a complete list of ways to make between 1 and 9 unique digits add to 10, as well as lower and upper bounds for the number of digits required if different from the supplied.  
@@ -20,7 +20,7 @@ Calculate ways to reach target sum `Target` with given constraints, as needed fo
 
 `sudokalculate(10,4,include=2:8)` (or equivalently `sudokalculate(10,4,exclude=[1,9])`) gives a list of ways to make 4 unique digits add to 10, not using 1 and 9 (helpfully informing you that it is impossible).  
 
-`sudokalculate(10,4,unique=false)` gives a list of ways to make any 4 digits between add to 10.  
+`sudokalculate(10,4,maxrepeats=4)` gives a list of ways to make any 4 digits between add to 10.  
 
 `sudokalculate(nothing,...)` gives a list of sums reachable with 3 digits with the specified constraints.
 

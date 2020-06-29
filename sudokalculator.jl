@@ -11,7 +11,7 @@ Calculate ways to reach target sum `Target` with given constraints, as needed fo
 # Arguments
 - `include=1:9`: The allowed digits
 - `exclude=zeros(Int64,0)`: Digits to exclude (Only digits that are in `include` and are NOT in `exclude` are used)
-- `unique=true`: Whether to disallow repeat digits (i.e. disable for little killer diagonals)
+- `maxrepeats=0`: The maximum number of times the same number can appear.
 
 # Examples
 `sudokalculate(10)` gives a complete list of ways to make between 1 and 9 unique digits add to 10, as well as lower and upper bounds for the number of digits required if different from the supplied.  
@@ -20,7 +20,7 @@ Calculate ways to reach target sum `Target` with given constraints, as needed fo
 
 `sudokalculate(10,4,include=2:8)` (or equivalently `sudokalculate(10,4,exclude=[1,9])`) gives a list of ways to make 4 unique digits add to 10, not using 1 and 9 (helpfully informing you that it is impossible).  
 
-`sudokalculate(10,4,unique=false)` gives a list of ways to make any 4 digits between add to 10.  
+`sudokalculate(10,4,maxrepeats=4)` gives a list of ways to make any 4 digits between add to 10.  
 
 `sudokalculate(nothing,...)` gives a list of sums reachable with 3 digits with the specified constraints.
 """
@@ -30,17 +30,20 @@ function sudokalculate(
 		       ;
 		       include::AbstractVector{Int64}=1:9,
 		       exclude::Union{Int64,AbstractVector{Int64}}=zeros(Int64,0),
-		       unique::Bool=true,
+		       maxrepeats::Int64=1,
 		       )
 	digits = setdiff(include,exclude);
 	options = Array{Int64}[]; # TODO: I know that the elements of this array will not be longer than maximum(Ns). Would it be more efficient to initialize it as zeros of that length?
 	for N = Ns
-		push!.(Ref(options),digits[x] for x in getoptions(N,length(digits),unique))
+		push!.(Ref(options),digits[x] for x in getoptions(N,length(digits),maxrepeats==1))
 	end
 
 	if !isnothing(Target)
 		deleteat!(options,sum.(options) .!== Target);
 	end
+
+	deleteat!(options,[any([count(x .== y) for x in digits] .> maxrepeats) for y in options])
+
 	if length(options) == 0
 		print("There is no way to do that.\n")
 		return nothing;
@@ -52,7 +55,7 @@ function sudokalculate(
 	end
 
 	if isnothing(Target)
-		print("You can make every sum in ",conciserange(Base.unique(sort(sum.(options)))),"\n");
+		print("You can make every sum in ",conciserange(unique(sort(sum.(options)))),"\n");
 		return nothing;
 	end
 
@@ -108,7 +111,6 @@ function conciserange(
 		      )::String
 	sb = IOBuffer();
 	print(sb,"[");
-
 	it = Iterators.Stateful(R);
 	while !isempty(it)
 		f = first(it);
@@ -128,7 +130,6 @@ function conciserange(
 		end
 	end
 	print(sb,"]");
-
 	return String(take!(sb));
 end
 
