@@ -1,0 +1,5 @@
+name = "SudoKalculator"
+uuid = "4e702b89-fef2-4faf-8ee8-8fdc8f97e4d9"
+authors = ["David Gustavsson <david.e.gustavsson@gmail.com>"]
+version = "0.1.0"
+desc="Helper tool for killer and sandwitch sudokus"
