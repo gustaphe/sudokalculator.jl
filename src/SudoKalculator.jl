@@ -63,11 +63,11 @@ function sudokalculate(
 	end
 
 	if !isnothing(Target)
-		deleteat!(options,sum.(options) .!== Target);
+		filter!(o->sum(o) == Target, options);
 	end
 
-	deleteat!(options,[!all([any([any(d.==o) for d in i]) for i in include]) for o in options]); # Deletes any options not containing every digit in `include`
-	deleteat!(options,[any([count(x .== y) for x in digits] .> maxrepeats) for y in options]); # Deletes any options with more than `maxrepeats` of any one digit
+	filter!(o->all(i->any(d->any(d.==o), i), include),options); # Deletes any options not containing every digit in `include`
+	filter!(o->!any(d->count(d .== o)>maxrepeats, digits),options); # Deletes any options with more than `maxrepeats` of any one digit
 
 	if length(options) == 0
 		print("There is no way to do that.\n")
