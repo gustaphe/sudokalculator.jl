@@ -8,4 +8,5 @@ julia> using SudoKalculator
 ```
 
 Documentation and examples at the link below.
+
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://gustaphe.github.io/sudokalculator.jl/dev)
