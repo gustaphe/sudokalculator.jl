@@ -14,7 +14,7 @@ Calculate ways to reach target sum `Target` with given constraints, as needed fo
 - `digits=1:9`: The allowed digits
 - `include=zeros(Int64,0)`: Digits that *must* be present in the final solution. Alternate necessities can be given as tuples in a vector (not as a scalar tuple)
 - `exclude=zeros(Int64,0)`: Digits that can not be present in the final solution (equivalent to leaving them out of `digits`)
-- `maxrepeats=0`: The maximum number of times the same number can appear.
+- `maxrepeats=1`: The maximum number of times the same number can appear.
 
 # Examples
 ```julia
@@ -35,12 +35,12 @@ sudokalculate(10,4,digits=2:8)
 ```julia
 sudokalculate(10,4,maxrepeats=4)
 ```
-gives a list of ways to make any 4 digits between add to 10.  
+gives a list of ways to make any 4 digits add to 10.  
 
 ```julia
 sudokalculate(nothing,...)
 ```
-gives a list of sums reachable with 3 digits with the specified constraints.
+gives a list of sums reachable with the specified constraints.
 
 ```julia
 sudokalculate(10,3,include=[1,(2,3)])
